@@ -9,13 +9,13 @@
       title-style="text-align:left;"
     />
     <div class="hot-container">
-      <a class="hot-item" href="" v-for="item in dataList" :key="item.id">
+      <a class="hot-item" href="" v-for="item in sightList" :key="item.id">
         <div class="img-area">
           <img :src="item.img" alt="" />
           <span class="item-level"></span>
         </div>
 
-        <h5 class="van-ellipsis">{{ item.title }}</h5>
+        <h5 class="van-ellipsis">{{ item.name }}</h5>
         <p class="price">
           <span>￥{{ $priceFormat(item.price) }}</span>
           <span>起</span>
@@ -27,40 +27,31 @@
 
 
 <script>
+import { ajax } from '@/utils/ajax'
+import { SightApis } from '@/utils/apis'
 export default {
   data() {
     return {
-      dataList: []
+      sightList: []
     }
   },
-  method() {},
+  methods: {
+    getDataList() {
+      console.log('hotApi:', SightApis.sightListUrl)
+      ajax
+        .get(SightApis.sightListUrl, {
+          params: {
+            is_hot: 1
+          }
+        })
+        .then((res) => {
+          console.log('hotRes:', res)
+          this.sightList = res.data.objects
+        })
+    }
+  },
   created() {
-    this.dataList = [
-      {
-        id: 1,
-        img: 'static/images/home/hot/h1.jpg',
-        title: '测试景点123131231',
-        price: 110
-      },
-      {
-        id: 2,
-        img: 'static/images/home/hot/h2.jpg',
-        title: '测试景点123131231',
-        price: 120
-      },
-      {
-        id: 3,
-        img: 'static/images/home/hot/h3.jpg',
-        title: '测试景点123131231',
-        price: 130
-      },
-      {
-        id: 4,
-        img: 'static/images/home/hot/h4.jpg',
-        title: '测试景点12122221231',
-        price: 140.222222
-      }
-    ]
+    this.getDataList()
   }
 }
 </script>
@@ -102,7 +93,9 @@ export default {
 
     h5,
     .price {
-      margin: 6px 0;
+      // 标题必须固定宽度，否则会因为标题文字长度不同影响容器大小
+      width: 100px;
+      margin: 4px 0;
 
       color: #212121;
       font-size: 12px;

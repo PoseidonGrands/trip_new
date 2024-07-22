@@ -11,28 +11,26 @@
 
 
 <script>
+import { ajax } from '@/utils/ajax'
+import { SystemApis } from '@/utils/apis'
+
 export default {
   data() {
     return {
       bannerList: []
     }
   },
-  method() {},
+  methods: {
+    getDataList() {
+      ajax.get(SystemApis.bannerListUrl).then((res) => {
+        console.log('res', res)
+        this.bannerList = res.data.objects
+      })
+    }
+  },
   created() {
-    this.bannerList = [
-      {
-        id: 1,
-        img: '/static/images/home/banner/banner1.jpg'
-      },
-      {
-        id: 2,
-        img: '/static/images/home/banner/banner2.jpg'
-      },
-      {
-        id: 3,
-        img: '/static/images/home/banner/banner3.jpg'
-      }
-    ]
+    // 接口获取轮播图数据
+    this.getDataList()
   }
 }
 </script>

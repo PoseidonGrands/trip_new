@@ -5,11 +5,9 @@ function priceFormat(price) {
   return `${price.toFixed(2)}`
 }
 
-function countSatis(star, commentCount) {
-  let res = (star / commentCount).toFixed(2) * 100
-  console.log(star, commentCount)
-  console.log((star / commentCount).toFixed(2) * 100)
-  return ((star / commentCount) * 100).toFixed(2)
+function countSatis(score) {
+  const maxScore = 5
+  return parseInt((score / maxScore) * 100)
 }
 
 export { priceFormat, countSatis }

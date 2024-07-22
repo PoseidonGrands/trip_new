@@ -1,21 +1,28 @@
 import axios from 'axios'
 
 export const ajax = axios.create({
-    withCredentials: true
+  withCredentials: true
 })
 
-ajax.interceptors.request.use(function (config) {
+// 请求钩子
+ajax.interceptors.request.use(
+  function (config) {
     console.log('request hook...')
     return config
-}, function (error) {
+  },
+  function (error) {
     return Promise.reject(error)
-})
+  }
+)
 
-
-ajax.interceptors.response.use(function (config) {
+// 响应钩子
+ajax.interceptors.response.use(
+  function (config) {
     console.log('response hook...')
     return config
-}, function (error){
-    console.log(error )
+  },
+  function (error) {
+    console.log(error)
     return Promise.reject(error)
-})
+  }
+)

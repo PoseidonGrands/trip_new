@@ -1,6 +1,6 @@
 <template>
   <div class="page-home">
-    <h1>Trip</h1>
+    <!-- <h1>Trip</h1> -->
     <Banner />
     <Hot />
     <Star />

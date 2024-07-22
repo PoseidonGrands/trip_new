@@ -2,15 +2,13 @@
   <a class="star-item" href="#">
     <img :src="item.img" alt="" />
     <div class="info">
-      <h2 class="title">{{ item.title }}</h2>
+      <h2 class="title">{{ item.name }}</h2>
       <van-rate v-model="item.score" allow-half void-icon="star" void-color="#eee" />
       <div class="tips">
-        <span>{{ item.commentCount }}人点评</span>|<span
-          >{{ $countSatis(item.score, item.commentCount) }}%满意</span
-        >
+        <span>{{ item.comment_count }}人点评</span>|<span>{{ $countSatis(item.score) }}%满意</span>
       </div>
       <div class="tips light">
-        <span>{{ item.province }}省</span>-<span>{{ item.loc }}市</span>
+        <span>{{ item.province }}省</span>-<span>{{ item.city }}市</span>
       </div>
       <span class="price">￥{{ $priceFormat(item.price) }}起</span>
     </div>
