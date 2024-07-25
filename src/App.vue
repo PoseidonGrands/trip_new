@@ -1,17 +1,15 @@
 <template>
-  <Home />
-  <TripFooter />
+  <!-- 路由的展示区域 -->
+  <router-view></router-view>
 </template>
 
 <script>
 import Home from '@/views/Home.vue'
-import TripFooter from '@/components/common/Footer.vue'
 
 export default {
   name: 'App',
   components: {
-    Home,
-    TripFooter
+    Home
   }
 }
 </script>

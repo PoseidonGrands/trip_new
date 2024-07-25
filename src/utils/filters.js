@@ -10,4 +10,8 @@ function countSatis(score) {
   return parseInt((score / maxScore) * 100)
 }
 
-export { priceFormat, countSatis }
+function nameFormat(name) {
+  return name.slice(0, 2) + '***'
+}
+
+export { priceFormat, countSatis, nameFormat }

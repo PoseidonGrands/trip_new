@@ -5,22 +5,30 @@
       title="热门推荐"
       value="全部榜单"
       is-link
+      :to="{ name: 'sightListPage', query: { type: 'hot' } }"
       icon="/static/images/home/hot/fire.png"
       title-style="text-align:left;"
     />
     <div class="hot-container">
-      <a class="hot-item" href="" v-for="item in sightList" :key="item.id">
-        <div class="img-area">
-          <img :src="item.img" alt="" />
-          <span class="item-level"></span>
-        </div>
+      <router-link
+        class="hot-item"
+        :to="{ name: 'sightDetailPage', params: { id: item.id } }"
+        v-for="item in sightList"
+        :key="item.id"
+      >
+        <a href="">
+          <div class="img-area">
+            <img :src="item.img" alt="" />
+            <span class="item-level"></span>
+          </div>
 
-        <h5 class="van-ellipsis">{{ item.name }}</h5>
-        <p class="price">
-          <span>￥{{ $priceFormat(item.price) }}</span>
-          <span>起</span>
-        </p>
-      </a>
+          <h5 class="van-ellipsis">{{ item.name }}</h5>
+          <p class="price">
+            <span>￥{{ $priceFormat(item.price) }}</span>
+            <span>起</span>
+          </p>
+        </a>
+      </router-link>
     </div>
   </div>
 </template>

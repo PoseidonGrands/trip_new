@@ -5,6 +5,7 @@
       title="热门推荐"
       value="全部榜单"
       is-link
+      :to="{ name: 'sightListPage', query: { type: 'star' } }"
       icon="location-o"
       title-style="text-align:left;"
     />

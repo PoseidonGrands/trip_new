@@ -1,9 +1,9 @@
 <template>
   <div class="page-home">
-    <!-- <h1>Trip</h1> -->
     <Banner />
     <Hot />
     <Star />
+    <TripFooter />
   </div>
 </template>
 
@@ -12,12 +12,14 @@
 import Banner from '@/components/home/Bannner.vue'
 import Hot from '@/components/home/Hot.vue'
 import Star from '@/components/home/Star.vue'
+import TripFooter from '@/components/common/Footer.vue'
 
 export default {
   components: {
     Banner,
     Hot,
-    Star
+    Star,
+    TripFooter
   }
 }
 </script>
