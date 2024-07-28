@@ -18,13 +18,16 @@
       v-model="currentPage"
       :total-items="totalItems"
       :items-per-page="itemsPerPage"
+      @change="changePage"
     />
   </div>
   <!-- 底部导航栏 -->
   <TripFooter />
 </template>
-  
-  <script>
+
+<script>
+import { ajax } from '@/utils/ajax'
+import { SightApis } from '@/utils/apis'
 import SightList from '@/components/common/SightList.vue'
 import TripFooter from '@/components/common/Footer.vue'
 export default {
@@ -45,22 +48,45 @@ export default {
       //   总共的景点数
       totalItems: 24,
       //   每页的多少条数据
-      itemsPerPage: 5
+      itemsPerPage: 4
     }
   },
   methods: {
+    getDataList() {
+      ajax
+        .get(SightApis.sightListUrl, {
+          params: {
+            name: this.sightName,
+            currentPage: this.currentPage,
+            limit: this.itemsPerPage
+          }
+        })
+        .then((res) => {
+          console.log(res.data)
+          this.sightList = res.data.objects
+          this.totalItems = res.data.meta.total_count
+          this.itemsPerPage = res.data.meta.per_page_count
+        })
+    },
+    // 访问景点接口获取景点信息
     onSearch() {
       console.log('search')
+      this.getDataList()
     },
     onFocus() {
       console.log('focus')
     },
     onCancel() {
       this.showAction = false
+    },
+    // 切换页面
+    changePage() {
+      console.log('page:', this.currentPage)
+      this.getDataList()
     }
   },
   created() {
-    this.sightList = []
+    this.getDataList()
   }
 }
 </script>

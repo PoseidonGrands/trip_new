@@ -2,7 +2,7 @@
 <template>
   <div class="home-star">
     <van-cell
-      title="热门推荐"
+      title="精选景点"
       value="全部榜单"
       is-link
       :to="{ name: 'sightListPage', query: { type: 'star' } }"
