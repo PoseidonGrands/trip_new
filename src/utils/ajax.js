@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { showLoadingToast } from 'vant'
+import { showNotify } from 'vant'
 
 export const ajax = axios.create({
   withCredentials: true
@@ -8,6 +10,12 @@ export const ajax = axios.create({
 ajax.interceptors.request.use(
   function (config) {
     // console.log('request hook...')
+
+    showLoadingToast({
+      message: '加载中...',
+      forbidClick: true,
+      loadingType: 'spinner'
+    })
     return config
   },
   function (error) {
@@ -22,7 +30,10 @@ ajax.interceptors.response.use(
     return config
   },
   function (error) {
-    console.log(error)
+    if (error.response.status == 500) {
+      showNotify({ message: '服务器正忙，请稍后重试' })
+    }
+    console.log('error:', error)
     return Promise.reject(error)
   }
 )

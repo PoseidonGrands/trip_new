@@ -28,7 +28,7 @@ export default {
       // 当前第几页
       currentIndex: 1,
       // 每页数据数
-      itemsPerPage: 7,
+      itemsPerPage: 6,
       // 总共数据量（用于计算有多少页
       totalItems: ''
     }
