@@ -12,7 +12,11 @@ const SystemApis = {
 }
 
 const SightApis = {
-  sightListUrl: apiHost + '/sight/list'
+  sightListUrl: apiHost + '/sight/list',
+  sightDetailUrl: apiHost + '/sight/detail',
+  sightInfoUrl: apiHost + '/sight/info',
+  sightTicketUrl: apiHost + '/sight/tickets',
+  sightCommentUrl: apiHost + '/sight/comment'
 }
 
 export { AccountApis, SystemApis, SightApis }

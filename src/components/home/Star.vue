@@ -38,7 +38,7 @@ export default {
           }
         })
         .then((res) => {
-          console.log('starRes:', res)
+          // console.log('starRes:', res)
           this.starList = res.data.objects
         })
     }
@@ -46,16 +46,6 @@ export default {
   created() {
     // 获取精选景点数据
     this.getDataList()
-    // {
-    //   id: 1,
-    //   img: 'static/images/home/hot/h1.jpg',
-    //   title: '测试景点123131231',
-    //   score: 3.5,
-    //   price: 110,
-    //   province: '广东',
-    //   loc: '广州',
-    //   commentCount: 6
-    // }
   }
 }
 </script>

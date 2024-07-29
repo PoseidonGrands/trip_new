@@ -7,7 +7,7 @@ export const ajax = axios.create({
 // 请求钩子
 ajax.interceptors.request.use(
   function (config) {
-    console.log('request hook...')
+    // console.log('request hook...')
     return config
   },
   function (error) {
@@ -18,7 +18,7 @@ ajax.interceptors.request.use(
 // 响应钩子
 ajax.interceptors.response.use(
   function (config) {
-    console.log('response hook...')
+    // console.log('response hook...')
     return config
   },
   function (error) {

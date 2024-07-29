@@ -4,31 +4,35 @@
     <van-nav-bar
       class="detail-nav"
       fixed
-      title=""
+      :title="sightDetail.name"
       left-text="返回"
       left-arrow
       @click-left="goBack"
     />
     <!-- 图片展示 -->
     <div class="main-img">
-      <van-image width="100%" height="100%" src="/static/images/home/hot/h2_max.jpg" alt="" />
+      <van-image width="100%" height="100%" :src="sightDetail.img" alt="" />
       <div class="tips">
         <router-link class="tips-container" :to="{ name: 'sightImagePage', params: { id: id } }">
           <van-icon name="photo" />
-          <span class="nums">5</span>
+          <span class="nums">{{ sightDetail.img_count }}</span>
           <span>图片</span>
         </router-link>
       </div>
-      <span class="img-name">广州长隆旅游度假区</span>
+      <!-- <span class="img-name">{{ name }}</span> -->
     </div>
     <!-- 景点评分和景点介绍 -->
     <div class="detail-info">
-      <router-link class="left info-item" :to="{ name: 'sightCommentPage', params: { id: id } }">
-        <strong class="score">5分</strong>
-        <small>很棒</small>
+      <router-link
+        @click="goInfoPage"
+        class="left info-item"
+        :to="{ name: 'sightCommentPage', params: { id: id } }"
+      >
+        <strong class="score">人均{{ sightDetail.score }}分</strong>
+        <!-- <small></small> -->
         <div class="comment-count small-title">
-          <span>2</span>
-          <span>评论</span>
+          <span>总共{{ sightDetail.comment_count }}</span>
+          <span>条评论</span>
         </div>
         <van-icon class="arrow" name="arrow" />
       </router-link>
@@ -39,25 +43,25 @@
       </router-link>
     </div>
     <!-- 景点地址 -->
-    <van-cell class="sight-loc" title="广东省广州市番禺区番禺大道" icon="location-o" is-link />
+    <van-cell class="sight-loc" :title="loc" icon="location-o" is-link />
     <!-- 门票列表 -->
-    <div class="ticket">
-      <van-cell title="门票" icon="sign" />
-      <div class="ticket-item" v-for="i in 6" :key="i">
+    <van-cell title="门票" icon="sign" />
+    <div class="ticket" v-if="!isEmptyObject(sightTickets)">
+      <div class="ticket-item" v-for="item in sightTickets" :key="item.id">
         <div class="left">
-          <div class="title">长隆野生动物世界（平日）门票</div>
+          <div class="title">{{ item.name }}</div>
           <div class="info">
             <div class="time">
               <van-icon name="clock-o" size="8px" />
-              <span>23:52前可定明日</span>
+              <span>{{ item.booking_deadline }}</span>
             </div>
-            <van-tag class="tip" round>无需换票</van-tag>
+            <van-tag class="tip" mark type="primary">无需换票</van-tag>
           </div>
         </div>
         <div class="right">
           <div class="price-area">
             <span class="unit">￥</span>
-            <strong class="price">174</strong>
+            <strong class="price">{{ item.final_price }}</strong>
           </div>
 
           <router-link to="#">
@@ -66,12 +70,13 @@
         </div>
       </div>
     </div>
+    <div v-else>暂无门票信息</div>
 
     <!-- 评价列表 -->
     <div class="comment-area">
       <van-cell title="热门评论" icon="/static/images/icons/message.png" />
       <!-- 使用评论组件 -->
-      <CommentItem :id="id" />
+      <CommentItem v-for="item in sightComments" :key="item.id" :item="item" />
       <router-link class="more-link" :to="{ name: 'sightCommentPage', params: { id: id } }">
         <van-nav-bar title="查看更多>>>" />
       </router-link>
@@ -81,29 +86,99 @@
   
   <script>
 import CommentItem from '@/components/sight/CommentItem.vue'
+import { ajax } from '@/utils/ajax'
+import { SightApis } from '@/utils/apis'
 export default {
   data() {
     return {
-      id: '222',
-      star: 4
+      id: '',
+      sightDetail: {},
+      sightTickets: {},
+      sightInfo: {},
+      sightComments: {}
+    }
+  },
+  computed: {
+    // 位置信息
+    loc() {
+      let area = this.sightDetail.area || ''
+      let town = this.sightDetail.town || ''
+      return this.sightDetail.province + '省' + this.sightDetail.city + '市' + area + town
+    }
+  },
+  watch: {
+    $route() {
+      this.loadData()
     }
   },
   methods: {
+    // 空对象判断
+    isEmptyObject(obj) {
+      if (!obj) {
+        return false
+      }
+      return Object.keys(obj).length === 0 && obj.constructor === Object
+    },
+    // 加载数据
+    loadData() {
+      this.id = this.$route.params.id
+      this.getSightDetail()
+      this.getSightTickets()
+      this.getSightComments()
+    },
+    // 景点详细信息页面数据
+    getSightDetail() {
+      let url = SightApis.sightDetailUrl + '/' + this.id
+      ajax.get(url).then(({ data }) => {
+        // console.log('res', data)
+        this.sightDetail = data
+      })
+    },
+    // 景点信息数据
+    getSightInfo() {
+      let url = SightApis.sightInfoUrl + '/' + this.id
+      ajax.get(url).then(({ data }) => {
+        this.sightInfo = data
+        // console.log('infoRes', this.sightInfo)
+      })
+    },
+    // 景点门票数据
+    getSightTickets() {
+      let url = SightApis.sightTicketUrl + '/' + this.id
+      ajax.get(url).then(({ data: { objects } }) => {
+        this.sightTickets = objects
+
+        // console.log('ticketsRes:', this.sightTickets)
+      })
+    },
+    // 景点评论数据
+    getSightComments() {
+      let url = SightApis.sightCommentUrl + '/' + this.id
+      ajax.get(url).then(({ data: { meta, objects } }) => {
+        this.sightComments = objects
+        console.log('commentRes:', this.sightComments)
+      })
+    },
+    // 返回上一页
     goBack() {
       console.log('点击返回')
       this.$router.go(-1)
+    },
+    // 跳转评论页面
+    goInfoPage() {
+      this.$router.push({ name: 'sightCommentPage', params: { id: this.id } })
     }
   },
   created() {
-    this.id = this.$route.params.id
+    this.loadData()
   },
   components: {
     CommentItem
   }
 }
 </script>
-  
-  <style lang="less" scoped>
+
+<style lang="less" scoped>
 .page-sight-detail {
   position: relative;
   //   顶部导航栏
@@ -120,8 +195,10 @@ export default {
     // banner图上的图片数量提示
     .tips {
       position: absolute;
-      left: 60px;
-      bottom: 30px;
+      //   left: 60px;
+      //   bottom: 30px;
+      left: 10px;
+      bottom: 10px;
 
       font-size: 16px;
       color: #fff;
@@ -138,14 +215,14 @@ export default {
         margin-right: 4px;
       }
     }
-    // 图片标题
-    .img-name {
-      position: absolute;
-      left: 10px;
-      bottom: 10px;
-      color: white;
-      z-index: 10;
-    }
+    // // 图片标题
+    // .img-name {
+    //   position: absolute;
+    //   left: 10px;
+    //   bottom: 10px;
+    //   color: white;
+    //   z-index: 10;
+    // }
   }
   //景点信息
   .detail-info {
@@ -207,7 +284,6 @@ export default {
           }
 
           .tip {
-            background-color: black;
             border-top-right-radius: 10px; /* 设置右上角的圆角 */
             border-bottom-right-radius: 10px; /* 设置右下角的圆角 */
             color: #fff;
