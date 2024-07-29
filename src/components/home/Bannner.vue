@@ -1,7 +1,7 @@
 <!-- 轮播图 -->
 <template>
   <div class="home-banner">
-    <van-swipe :autoplay="3000" :height="150">
+    <van-swipe :autoplay="3000" :height="120">
       <van-swipe-item v-for="banner in bannerList" :key="banner.id">
         <img :src="banner.img" alt="" />
       </van-swipe-item>
@@ -39,6 +39,7 @@ export default {
 .home-banner {
   img {
     width: 100%;
+    height: 100%;
   }
 }
 </style>

@@ -5,7 +5,7 @@
       title="精选景点"
       value="全部榜单"
       is-link
-      :to="{ name: 'sightListPage', query: { type: 'star' } }"
+      :to="{ name: 'searchPage', query: { type: 'star' } }"
       icon="location-o"
       title-style="text-align:left;"
     />
@@ -63,8 +63,5 @@ export default {
 <style lang="less" scoped>
 .home-star {
   margin-top: 2px;
-}
-.star-main {
-  padding: 0 16px;
 }
 </style>

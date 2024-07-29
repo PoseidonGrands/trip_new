@@ -5,7 +5,7 @@
       title="热门推荐"
       value="全部榜单"
       is-link
-      :to="{ name: 'sightListPage', query: { type: 'hot' } }"
+      :to="{ name: 'searchPage', query: { type: 'hot' } }"
       icon="/static/images/home/hot/fire.png"
       title-style="text-align:left;"
     />
