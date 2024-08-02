@@ -8,7 +8,7 @@
       <van-tabbar-item name="search" icon="search" :to="{ name: 'searchPage' }"
         >搜索</van-tabbar-item
       >
-      <van-tabbar-item name="mine" icon="user-o" to="#">我的</van-tabbar-item>
+      <van-tabbar-item name="mine" icon="user-o" :to="{ name: 'minePage' }">我的</van-tabbar-item>
     </van-tabbar>
   </div>
 </template>
