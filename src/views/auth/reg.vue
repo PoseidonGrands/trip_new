@@ -55,7 +55,9 @@
         />
       </van-cell-group>
       <div style="margin: 16px">
-        <van-button round block type="primary" native-type="submit"> 提交 </van-button>
+        <van-button round block type="primary" native-type="submit" @click="doReg">
+          提交
+        </van-button>
       </div>
     </van-form>
     <p class="tip">
@@ -73,6 +75,8 @@
 import TopBar from '@/components/common/TopBar.vue'
 import CopyRight from '@/components/common/CopyRight.vue'
 import SendSmsButton from '@/components/common/SendSmsCode.vue'
+import { ajax } from '@/utils/ajax'
+import { AccountApis } from '@/utils/apis'
 export default {
   data() {
     return {
@@ -93,7 +97,23 @@ export default {
       ]
     }
   },
-  methods: {},
+  methods: {
+    doReg() {
+      ajax
+        .post(AccountApis, {
+          params: {
+            phone: this.form.phone,
+            sms_code: this.form.sms,
+            nickname: this.form.username,
+            password: this.form.password,
+            confirm_password: this.form.repeatPassword
+          }
+        })
+        .then((res) => {
+          console.log(res)
+        })
+    }
+  },
   components: {
     TopBar,
     CopyRight,

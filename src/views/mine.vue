@@ -4,6 +4,15 @@
     <div class="header">
       <p class="avatar">
         <van-image
+          v-if="user.avatar"
+          round
+          width="5rem"
+          height="5rem"
+          fit="cover"
+          :src="user.avatar"
+        />
+        <van-image
+          v-else
           round
           width="5rem"
           height="5rem"
@@ -11,8 +20,8 @@
           src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg"
         />
       </p>
-      <p class="title tip">欢迎您，{{ username }}</p>
-      <p class="logout tip"><router-link to="#">退出登录</router-link></p>
+      <p class="title tip">欢迎您，{{ user.nickname }}</p>
+      <p class="logout tip" @click="doLogout">退出登录</p>
     </div>
     <!-- 订单的菜单列表 -->
     <van-row class="options">
@@ -39,13 +48,51 @@
 
 <script>
 import TripFooter from '@/components/common/Footer.vue'
+import { mapState, mapMutations } from 'vuex'
+import { ajax } from '@/utils/ajax'
+import { AccountApis } from '@/utils/apis'
+import { showNotify } from 'vant'
 export default {
   data() {
     return {}
   },
-  methods: {},
+  methods: {
+    ...mapMutations(['updateUserInfo', 'deleteUserInfo']),
+    doLogout() {
+      ajax.get(AccountApis.logoutUrl).then((res) => {
+        console.log(res)
+      })
+
+      // 清除本地数据
+      this.deleteUserInfo()
+
+      // 跳转到首页
+      this.$router.push({ name: 'homePage' })
+
+      // 提示
+      showNotify({ type: 'success', message: '已退出登录' })
+    }
+  },
   components: {
     TripFooter
+  },
+  computed: {
+    ...mapState(['user'])
+  },
+  // 页面挂载时重新获取（通过cookie
+  mounted() {
+    ajax
+      .get(AccountApis.getInfoUrl)
+      .then(({ data }) => {
+        console.log(data)
+        this.updateUserInfo(data)
+
+        // 更改状态
+        this.$store.commit('changeLogin')
+      })
+      .catch(() => {
+        this.$router.push({ name: 'loginPage' })
+      })
   }
 }
 </script>

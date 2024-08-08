@@ -3,8 +3,10 @@ const apiHost = 'http://localhost:5173/api'
  * 账户相关的接口
  */
 const AccountApis = {
-  loginUrl: '',
-  logoutUrl: ''
+  regUrl: apiHost + '/accounts/reg',
+  loginUrl: apiHost + '/accounts/login',
+  logoutUrl: apiHost + '/accounts/logout',
+  getInfoUrl: apiHost + '/accounts/info'
 }
 
 const SystemApis = {

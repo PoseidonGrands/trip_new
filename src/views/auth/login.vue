@@ -25,11 +25,15 @@
       </van-cell-group>
       <!-- 信息提交 -->
       <div style="margin: 16px">
-        <van-button round block type="primary" native-type="submit"> 提交 </van-button>
+        <van-button round block type="primary" native-type="submit" @click="doLogin">
+          提交
+        </van-button>
       </div>
     </van-form>
     <!-- 提示 -->
-    <p class="to-login tip">没有帐号？<router-link :to="{name: 'regPage'}">点击注册>></router-link></p>
+    <p class="to-login tip">
+      没有帐号？<router-link :to="{ name: 'regPage' }">点击注册>></router-link>
+    </p>
 
     <!-- 版权信息组件 -->
     <CopyRight />
@@ -39,6 +43,9 @@
 <script>
 import TopBar from '@/components/common/TopBar.vue'
 import CopyRight from '@/components/common/CopyRight.vue'
+import { ajax } from '@/utils/ajax'
+import { AccountApis } from '@/utils/apis'
+import { showNotify } from 'vant'
 export default {
   data() {
     return {
@@ -50,7 +57,30 @@ export default {
   },
   methods: {
     // 用户登录
-    onSubmit() {}
+    doLogin() {
+      console.log('username', this.username)
+      console.log('password', this.password)
+
+      ajax
+        .post(AccountApis.loginUrl, {
+          username: this.username,
+          password: this.password
+        })
+        .then(({ data }) => {
+          console.log('res', data)
+          this.$store.commit('updateUserInfo', data)
+          showNotify({ type: 'success', message: '登录成功' })
+
+          // 更改状态
+          this.$store.commit('changeLogin')
+
+          // 跳转到我的页面
+          this.$router.push({ name: 'minePage' })
+        })
+        .catch(({ response: { data } }) => {
+          showToast(`${data.error_code}:${data.error_msg}`)
+        })
+    }
   },
   components: {
     TopBar,
